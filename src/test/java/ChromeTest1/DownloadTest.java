@@ -69,6 +69,16 @@ public class DownloadTest {
         if(SystemUtils.IS_OS_LINUX){
           	log.info("connected to the Linux ENV");
          	String currentUser=System.getProperty("user.name");
+         	downloadPath = System.getProperty("user.dir")+"\\src\\test\\resources\\TestData";
+         	log.info(downloadPath);
+         	final File folder = new File(downloadPath);
+         	log.info("folderName-"+folder.getName());
+            log.info(folder.getAbsoluteFile().length());
+            log.info("-----------------------------------");
+            
+            downloadPath = System.getProperty("user.dir");
+            log.info(downloadPath);
+            log.info("-----------------------------------");
           }
         
         this.downloadFileTest(driver, downloadPath);
