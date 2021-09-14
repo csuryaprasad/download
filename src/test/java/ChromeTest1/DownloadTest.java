@@ -69,8 +69,7 @@ public class DownloadTest {
         if(SystemUtils.IS_OS_LINUX){
           	log.info("connected to the Linux ENV");
          	String currentUser=System.getProperty("user.name");
-          	log.info("User Name-"+ currentUser);
-         }
+          }
         
         this.downloadFileTest(driver, downloadPath);
   
@@ -87,6 +86,7 @@ public class DownloadTest {
      	String currentUser=System.getProperty("user.name");
       	log.info("User Name-"+ currentUser);
         log.info("setting chrome download path:"+downloadPath);
+        log.info(folder.getName());
         
         try {
        		if(folder.exists()) {
