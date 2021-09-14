@@ -14,6 +14,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -28,7 +29,7 @@ import com.google.common.io.PatternFilenameFilter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 
-
+import org.openqa.selenium.JavascriptExecutor;
 public class DownloadTest {
 
 	Logger log = Logger.getLogger("rootLogger");
@@ -45,7 +46,7 @@ public class DownloadTest {
 		ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--headless");
+        //options.addArguments("--headless");
         
         DesiredCapabilities capabilities = new DesiredCapabilities();
         LoggingPreferences logPrefs = new LoggingPreferences();
@@ -64,8 +65,7 @@ public class DownloadTest {
         options.setExperimentalOption("prefs", chromePrefs);
 
         WebDriver driver = new ChromeDriver(options); 
-        Dimension dim=new Dimension(1382, 744);
-        driver.manage().window().setSize(dim);
+        driver.manage().window().maximize();
         driver.navigate().to(sourceURL);
         
         if(SystemUtils.IS_OS_LINUX){
@@ -83,7 +83,7 @@ public class DownloadTest {
 	private void downloadFileTest(WebDriver driver,String downloadPath) {
     	final File folder = new File(downloadPath);
      	
-    	 
+    	JavascriptExecutor js = (JavascriptExecutor)driver;
          
     	 
      	String currentUser=System.getProperty("user.name");
@@ -96,7 +96,7 @@ public class DownloadTest {
        		}else {
     			log.info("Download folder doesnot exist");	
        		}
-    		File[] files = folder.listFiles(new PatternFilenameFilter("chromedriver_win32.zip"));
+    		File[] files = folder.listFiles();
     		int len = files.length;
     		log.info("Folder Lenght "+ len);
     		for ( final File file : files ) {
@@ -104,14 +104,21 @@ public class DownloadTest {
     				log.error( "Can't remove " + file.getAbsolutePath() );
     			}
     				log.info("File Deleted ");
-    				driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
-    				Thread.sleep(10000);
     		 }	
-       		driver.findElement(By.xpath("//a[text()='chromedriver_win32.zip']")).click(); 
-    		driver.manage().timeouts().implicitlyWait(120, TimeUnit.MILLISECONDS);
     		
+      		
+      		driver.navigate().refresh();
+      		Thread.sleep(10000);
+    		driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
+    		WebElement link =driver.findElement(By.xpath("//a[@href='/94.0.4606.41/chromedriver_win32.zip']"));
     		
-      		files = folder.listFiles(new PatternFilenameFilter("chromedriver_win32.zip"));
+    		js.executeScript("arguments[0].click();", link);
+    		
+       		//driver.findElement(By.xpath("//a[@href='/94.0.4606.41/chromedriver_win32.zip']")).click(); 
+    		driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+    		
+    		Thread.sleep(10000);
+      		files = folder.listFiles();
        		if (files.length > 0) {
        			log.info("File Downloaded Successfully!!!!!!!!!!");
     		}else{
