@@ -17,19 +17,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.Test;
 
-import com.google.common.io.PatternFilenameFilter;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 
 import org.openqa.selenium.JavascriptExecutor;
+
 public class DownloadTest {
 
 	Logger log = Logger.getLogger("rootLogger");
@@ -46,7 +44,7 @@ public class DownloadTest {
 		ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-        //options.addArguments("--headless");
+        options.addArguments("--headless");
         
         DesiredCapabilities capabilities = new DesiredCapabilities();
         LoggingPreferences logPrefs = new LoggingPreferences();
