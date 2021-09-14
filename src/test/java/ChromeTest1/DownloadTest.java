@@ -14,7 +14,6 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -38,17 +37,15 @@ public class DownloadTest {
 	public void downloadExampleTest () {
 		     	
       	      	
-      	String sourceURL = "https://file-examples.com/index.php/text-files-and-archives-download/";
+      	String sourceURL = "https://chromedriver.storage.googleapis.com/index.html?path=94.0.4606.41/";
       	String downloadPath = System.getProperty("user.dir")+"\\src\\test\\resources\\TestData";
       	
-      	
-      	
-      	//Chrome Setup
+       	//Chrome Setup
       	WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-        
+        options.addArguments("--headless");
         
         DesiredCapabilities capabilities = new DesiredCapabilities();
         LoggingPreferences logPrefs = new LoggingPreferences();
@@ -63,7 +60,6 @@ public class DownloadTest {
         chromePrefs.put("profile.default_content_settings.popups", 0);
         // Setting the file download location for Chrome
        
-
         chromePrefs.put("download.default_directory", downloadPath);
         options.setExperimentalOption("prefs", chromePrefs);
 
@@ -73,9 +69,7 @@ public class DownloadTest {
         driver.navigate().to(sourceURL);
         
         if(SystemUtils.IS_OS_LINUX){
-        	options.addArguments("--headless");
-        	// this options is for linux environment on docker
-         	log.info("connected to the Linux ENV");
+          	log.info("connected to the Linux ENV");
          	String currentUser=System.getProperty("user.name");
           	log.info("User Name-"+ currentUser);
          }
@@ -102,7 +96,7 @@ public class DownloadTest {
        		}else {
     			log.info("Download folder doesnot exist");	
        		}
-    		File[] files = folder.listFiles(new PatternFilenameFilter("file_example_CSV_.*\\.csv"));
+    		File[] files = folder.listFiles(new PatternFilenameFilter("chromedriver_win32.zip"));
     		int len = files.length;
     		log.info("Folder Lenght "+ len);
     		for ( final File file : files ) {
@@ -110,25 +104,14 @@ public class DownloadTest {
     				log.error( "Can't remove " + file.getAbsolutePath() );
     			}
     				log.info("File Deleted ");
+    				driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);
+    				Thread.sleep(10000);
     		 }	
-    		//span[text()='Close']
-    		driver.findElement(By.xpath("(//td[@class='text-right file-link'])[1]")).click(); 
-    		driver.manage().timeouts().implicitlyWait(120, TimeUnit.MILLISECONDS);
-    		Thread.sleep(500);
-    		Robot r = new Robot();
-    		r.keyPress(KeyEvent.VK_ESCAPE);
-    		r.keyRelease(KeyEvent.VK_ESCAPE);
+       		driver.findElement(By.xpath("//a[text()='chromedriver_win32.zip']")).click(); 
     		driver.manage().timeouts().implicitlyWait(120, TimeUnit.MILLISECONDS);
     		
-    		Actions action = new Actions(driver);
-    		action.sendKeys(Keys.ESCAPE).build().perform();
-    		driver.manage().timeouts().implicitlyWait(120, TimeUnit.MILLISECONDS);
-    		Thread.sleep(1500);
     		
-    		driver.findElement(By.id("aswift_4")).sendKeys(Keys.ESCAPE);
-    		driver.manage().timeouts().implicitlyWait(120, TimeUnit.MILLISECONDS);
-    		
-      		files = folder.listFiles(new PatternFilenameFilter("file_example_CSV_.*\\.csv"));
+      		files = folder.listFiles(new PatternFilenameFilter("chromedriver_win32.zip"));
        		if (files.length > 0) {
        			log.info("File Downloaded Successfully!!!!!!!!!!");
     		}else{
@@ -144,6 +127,7 @@ public class DownloadTest {
 		} // end of try block
 		catch (Throwable e)	{
 			log.error("Exception - Location doesnot exist");
+			driver.findElement(By.xpath("//a[text()='chromedriver_win32.zip']")).click(); 
 		} 
 		driver.quit();
     }
