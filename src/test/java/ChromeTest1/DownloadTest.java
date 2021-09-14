@@ -78,8 +78,8 @@ public class DownloadTest {
 	
 
 	private void downloadFileTest(WebDriver driver,String downloadPath) {
-    	final File folder = new File(downloadPath);
-     	
+    	//final File folder = new File(downloadPath);
+     	final File folder = new File("/home/runner/work/download\\src\\test\\resources\\TestData");
     	JavascriptExecutor js = (JavascriptExecutor)driver;
          
     	 
@@ -87,6 +87,7 @@ public class DownloadTest {
       	log.info("User Name-"+ currentUser);
         log.info("setting chrome download path:"+downloadPath);
         log.info(folder.getName());
+        
         
         try {
        		if(folder.exists()) {
