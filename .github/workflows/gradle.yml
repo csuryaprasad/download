@@ -31,5 +31,5 @@ jobs:
           chmod +x ./scripts/InstallChrome.sh
         ./scripts/InstallChrome.sh
   
-    - name: Run Tests
+    - name: Run
       run: ./gradlew test --info # Run our tests using Gradle
